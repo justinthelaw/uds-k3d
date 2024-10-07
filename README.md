@@ -16,7 +16,7 @@ sudo ssh -N -L 80:localhost:80 -L 443:localhost:443 -L 6550:localhost:6550 <your
 > [!NOTE]
 > UDS K3d intentionally does not address airgap concerns for K3d or the load balancer logic deployed in this package. This allows running `zarf init` or deploying a Zarf Init Package via a UDS Bundle after the UDS K3d environment is deployed.
 
-## Prerequisites
+## Pre-Requisites
 
 - [UDS CLI](https://github.com/defenseunicorns/uds-cli/blob/main/README.md#install) & [K3d](https://k3d.io/#installation) using the versions specified in the [uds-common repo](https://github.com/defenseunicorns/uds-common/blob/main/README.md#supported-tool-versions)
 - [Docker](https://docs.docker.com/get-docker/) or [Podman](https://podman.io/getting-started/installation) for running K3d
@@ -69,3 +69,7 @@ package:
 ### DNS Assumptions
 
 - [DNS Assumptions](docs/DNS.md)
+
+### Enabling GPU Support
+
+- [GPU Workload Configuration](docs/GPU.md)

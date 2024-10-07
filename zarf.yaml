@@ -4,7 +4,7 @@ kind: ZarfPackageConfig
 metadata:
   name: uds-k3d
   description: "UDS K3d Cluster Setup. WARNING: This will destroy the cluster if it already exists."
-  url: https://github.com/defenseunicorns/uds-k3d
+  url: https://github.com/justinthelaw/uds-k3d
   yolo: true
   # x-release-please-start-version
   version: "0.9.0"
@@ -18,6 +18,10 @@ variables:
   - name: K3D_IMAGE
     description: "K3d image to use"
     default: "rancher/k3s:v1.30.4-k3s1"
+
+  - name: CUDA_IMAGE
+    description: "CUDA image to use"
+    default: "12.4.1-base-ubuntu22.04"
 
   - name: K3D_EXTRA_ARGS
     description: "Optionally pass k3d arguments to the default"
@@ -36,6 +40,19 @@ components:
         before:
           - cmd: k3d cluster delete ${ZARF_VAR_CLUSTER_NAME}
             description: "Destroy the cluster"
+
+  - name: enable-cuda
+    only:
+      flavor: cuda
+    description: "Use the CUDA K3s base image for bootstrapping the UDS K3d Cluster"
+    actions:
+      onDeploy:
+        before:
+          - cmd: |
+              docker pull oci://ghcr.io/justinthelaw/oss/uds-k3d-k3s:${ZARF_VAR_K3D_IMAGE}-cuda-${ZARF_VAR_CUDA_IMAGE}
+              echo ghcr.io/justinthelaw/oss/uds-k3d-k3s:${ZARF_VAR_K3D_IMAGE}-cuda-${ZARF_VAR_CUDA_IMAGE}
+            setVariables:
+              - name: K3D_IMAGE
 
   - name: create-cluster
     required: true
@@ -73,12 +90,12 @@ components:
     actions:
       onDeploy:
         before:
-          - cmd: ./zarf tools kubectl get nodes -o=jsonpath='{.items[0].status.addresses[?(@.type=="InternalIP")].address}' | cut -d'.' -f1-3
+          - cmd: uds zarf tools kubectl get nodes -o=jsonpath='{.items[0].status.addresses[?(@.type=="InternalIP")].address}' | cut -d'.' -f1-3
             description: "Load network ip base for MetalLB"
             setVariables:
               - name: BASE_IP
         after:
-          - cmd: ./zarf tools kubectl rollout restart deployment coredns -n kube-system
+          - cmd: uds zarf tools kubectl rollout restart deployment coredns -n kube-system
             description: "Restart CoreDNS to pick up internal DNS override for uds.dev"
     charts:
       - name: metallb

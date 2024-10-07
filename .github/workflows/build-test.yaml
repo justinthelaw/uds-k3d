@@ -7,16 +7,16 @@ on:
       - "docs/**"
       - "CODEOWNERS"
 
-permissions:
-  id-token: write
-  contents: read
-
 jobs:
   test-clean-install:
     runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
     strategy:
       matrix:
-        image: ["rancher/k3s"]
         version: ["v1.29.8-k3s1", "v1.30.4-k3s1", "v1.31.0-k3s1"]
 
     steps:
@@ -26,16 +26,16 @@ jobs:
         if: always()
         uses: defenseunicorns/uds-common/.github/actions/setup@e3008473beab00b12a94f9fcc7340124338d5c08 # v0.13.1
         with:
-          username: ${{secrets.IRON_BANK_ROBOT_USERNAME}}
-          password: ${{secrets.IRON_BANK_ROBOT_PASSWORD}}
+          registry1Username: ${{ secrets.IRON_BANK_ROBOT_USERNAME }}
+          registry1Password: ${{ secrets.IRON_BANK_ROBOT_PASSWORD }}
+          ghToken: ${{ secrets.GITHUB_TOKEN }}
 
-      # Step is not currently being used, could be uncommented if custom image support is needed in the future
-      # - name: Build the custom k3s image
-      #   if: ${{matrix.image}} != "rancher/k3s"
-      #   run: uds run build-image --set VERSION=${{matrix.version}} --no-progress
+      - name: Build the custom k3s image
+        if: ${{matrix.image}} != "rancher/k3s"
+        run: uds run build-image --set VERSION=${{matrix.version}} --no-progress
 
       - name: Create and deploy the uds-k3d package
-        run: uds run --set IMAGE_NAME=${{matrix.image}} --set VERSION=${{matrix.version}} --no-progress
+        run: uds run --set VERSION=${{matrix.version}} --no-progress
 
       - name: Validate uds-k3d package
         run: uds run validate --no-progress
