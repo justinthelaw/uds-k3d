@@ -44,7 +44,7 @@ None of the following should ever error or return `unknown version`:
 
 #### Memory Errors or Process Locks
 
-If you are, a) not deploying a fresh cluster or fresh packages (e.g., a GPU workload is already deployed), or b) you have a GPU that has other workloads on it (e.g., display), then there may not be enough resources to offload the workloads to the NVIDIA GPU.
+If you are, not deploying a fresh cluster or fresh packages (e.g., a GPU workload is already deployed) or you have a GPU that has other workloads on it (e.g., display), then there may not be enough resources to offload the workloads to the NVIDIA GPU.
 
 1. To see what host-level processes are on your NVIDIA GPU(s) run the following:
 
