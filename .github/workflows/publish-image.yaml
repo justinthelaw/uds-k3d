@@ -14,8 +14,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        version: ["v1.29.8-k3s1", "v1.30.4-k3s1", "v1.31.0-k3s1"]
-        cuda_version: ["12.4.1-base-ubuntu22.04"]
+        version: ["v1.30.4-k3s1"]
+        cuda_version: ["12.6.1-base-ubuntu22.04"]
 
     permissions:
       contents: read
@@ -33,13 +33,6 @@ jobs:
           registry1Username: ${{ secrets.IRON_BANK_ROBOT_USERNAME }}
           registry1Password: ${{ secrets.IRON_BANK_ROBOT_PASSWORD }}
           ghToken: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build the CUDA K3s image
-        run: |
-          uds run publish-image \
-            --set VERSION=${{matrix.version}} \
-            --set CUDA_VERSION=${{matrix.version}} \
-            --no-progress
 
       - name: Publish the CUDA K3s image
         run: |
