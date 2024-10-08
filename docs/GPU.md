@@ -11,10 +11,6 @@ UDS K3d comes with optional base images that provide GPU scheduling in the clust
 - Ensure that the proper [NVIDIA drivers](https://www.nvidia.com/download/index.aspx) are installed (>=525.60).
 - Follow the [driver download](https://www.nvidia.com/download/index.aspx) by identifying your hardware from the provided list.
 
-### CUDA Toolkit
-
-- Follow the [instructions](https://developer.nvidia.com/cuda-downloads) to download the CUDA toolkit (>=12.2x). This toolkit is only required on the system that is building the Zarf Packages.
-
 ### NVIDIA Container Toolkit
 
 - [Read the pre-requisites for installation and follow the instructions](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#installing-with-apt) to download and install the NVIDIA container toolkit (>=1.14).

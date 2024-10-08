@@ -25,7 +25,7 @@ variables:
 
   - name: CUDA_IMAGE
     description: "CUDA image to use"
-    default: "12.6.1-base-ubuntu22.04"
+    default: "12.1.0-base-ubuntu22.04"
 
   - name: K3D_EXTRA_ARGS
     description: "Optionally pass k3d arguments to the default"
