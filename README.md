@@ -54,13 +54,13 @@ k3d cluster start uds
 
 ## Additional Info
 
-You can set extra K3d arguments by setting the deploy-time `ZARF_VAR_K3D_EXTRA_ARGS` via a `ZARF_CONFIG`. See below `zarf-config.yaml` example below for K3d args examples:
+You can set extra K3d arguments by setting the deploy-time `ZARF_VAR_K3D_EXTRA_ARGS`. See below `zarf-config.yaml` example below for K3d args examples:
 
 ```yaml
 package:
   deploy:
     set:
-      k3d_extra_args: --k3s-arg "--<arg2>=<value>@server:*"
+      k3d_extra_args: --k3s-arg "--<arg2>=<value>@server:*" --gpus=all
 ```
 
 ### Configure MinIO

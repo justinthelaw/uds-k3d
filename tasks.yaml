@@ -9,8 +9,6 @@ variables:
     default: "rancher/k3s"
   - name: K3D_EXTRA_ARGS
     default: ""
-  - name: ZARF_CONFIG
-    default: ""
   - name: NGINX_EXTRA_PORTS
     default: "[]"
   - name: CUDA_TEST
@@ -24,8 +22,6 @@ tasks:
         cmd: "rm -rf zarf-package-uds-k3d-*.tar.zst && uds zarf package create --confirm --no-progress"
 
       - description: "Deploy the uds-k3d package"
-        env:
-          - ZARF_CONFIG=${ZARF_CONFIG}
         cmd: |
           uds zarf package deploy zarf-package-uds-k3d-*.tar.zst \
             --set K3D_IMAGE_NAME=${IMAGE_NAME} \
@@ -41,8 +37,6 @@ tasks:
         cmd: "rm -rf zarf-package-uds-k3d-*.tar.zst && uds zarf package create --flavor cuda --confirm --no-progress"
 
       - description: "Deploy the uds-k3d CUDA package"
-        env:
-          - ZARF_CONFIG=${ZARF_CONFIG}
         cmd: |
           uds zarf package deploy zarf-package-uds-k3d-*.tar.zst \
             --set K3D_EXTRA_ARGS="${K3D_EXTRA_ARGS}" \
