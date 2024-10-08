@@ -20,6 +20,7 @@ sudo ssh -N -L 80:localhost:80 -L 443:localhost:443 -L 6550:localhost:6550 <your
 
 - [UDS CLI](https://github.com/defenseunicorns/uds-cli/blob/main/README.md#install) & [K3d](https://k3d.io/#installation) using the versions specified in the [uds-common repo](https://github.com/defenseunicorns/uds-common/blob/main/README.md#supported-tool-versions)
 - [Docker](https://docs.docker.com/get-docker/) or [Podman](https://podman.io/getting-started/installation) for running K3d
+- See the [GPU Configuration](./docs/GPU.md) information for more details on enabling NVIDIA GPU support within the cluster
 
 ## Deploy
 
@@ -59,7 +60,7 @@ You can set extra k3d args by setting the deploy-time ZARF_VAR_K3D_EXTRA_ARGS. S
 package:
   deploy:
     set:
-      k3d_extra_args: "--k3s-arg --gpus=1 --k3s-arg --<arg2>=<value>"
+      k3d_extra_args: "--k3s-arg --<arg2>=<value>"
 ```
 
 ### Configure MinIO

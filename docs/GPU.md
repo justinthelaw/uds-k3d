@@ -4,6 +4,59 @@ UDS K3d comes with optional base images that provide GPU scheduling in the clust
 
 ## NVIDIA
 
+### Pre-Requisites
+
+### NVIDIA Drivers
+
+- Ensure that the proper [NVIDIA drivers](https://www.nvidia.com/download/index.aspx) are installed (>=525.60).
+- Follow the [driver download](https://www.nvidia.com/download/index.aspx) by identifying your hardware from the provided list.
+
+### CUDA Toolkit
+
+- Follow the [instructions](https://developer.nvidia.com/cuda-downloads) to download the CUDA toolkit (>=12.2x). This toolkit is only required on the system that is building the Zarf Packages.
+
+### NVIDIA Container Toolkit
+
+- [Read the pre-requisites for installation and follow the instructions](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#installing-with-apt) to download and install the NVIDIA container toolkit (>=1.14).
+- After the successful installation off the toolkit, follow the [toolkit instructions](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#configuring-docker) to verify that your default Docker runtime is configured for NVIDIA:
+
+  ```bash
+  nvidia-ctk runtime configure --runtime=docker --config=$HOME/.config/docker/daemon.json
+  ```
+
+- Verify that `nvidia` is now a runtime available to the Docker daemon to use:
+
+  ```bash
+  # the expected output should be similar to: `Runtimes: io.containerd.runc.v2 nvidia runc`
+  docker info | grep -i nvidia
+  ```
+
+- [Try out a sample CUDA workload](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/sample-workload.html) to ensure your Docker containers have access to the GPUs after configuration.
+- (OPTIONAL) You can configure Docker to use the `nvidia` runtime by default by adding the `--set-as-default` flag during the container toolkit post-installation configuration step by running the following command:
+
+  ```bash
+  nvidia-ctk runtime configure --runtime=docker --config=$HOME/.config/docker/daemon.json --set-as-default
+  ```
+
+- (OPTIONAL) Verify that the default runtime is changed by running the following command:
+
+  ```bash
+  # the expected output should be similar to: `Default Runtime: nvidia`
+  docker info | grep "Default Runtime"
+  ```
+
+### Usage
+
+#### Local Build
+
+To use the NVIDIA CUDA K3s image when bootstrapping a UDS K3d cluster, execute the following:
+
+```bash
+uds run default-cuda
+```
+
+#### Remote
+
 To use the NVIDIA CUDA K3s image when bootstrapping a UDS K3d cluster, execute the following:
 
 <!-- x-release-please-start-version -->
