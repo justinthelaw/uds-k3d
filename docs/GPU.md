@@ -64,20 +64,6 @@ uds zarf package deploy oci://justinthelaw/uds-k3d:${VERSION}-cuda --confirm
 
 <!-- x-release-please-end -->
 
-#### Windows (WSL2)
-
-The following additional K3s arg must be provided to the UDS task:
-
-```bash
-uds run default-cuda --set K3D_EXTRA_ARGS="--gpus=all"
-```
-
-If running from the upstream package, the command would look like this:
-
-```bash
-uds zarf package deploy oci://justinthelaw/uds-k3d:${VERSION}-cuda --set K3D_EXTRA_ARGS="--gpus=all" --confirm 
-```
-
 ### Tests
 
 This repository includes two CUDA workload tests that can be executed:
@@ -151,3 +137,80 @@ When you reinstall or start a new GPU-dependent pod, the previous PID (process) 
 
 1. Scale the previous GPU-dependent pod deployment down to 0, as the current `RollingUpdate` strategy for vLLM relies on back-up/secondary GPUs to be available for a graceful turnover
 2. Use `nvidia-smi` to check if the process has been flushed upon Pod termination BEFORE you deploy a new GPU-dependent pod, and if not, use `kill -9 <PID>` to manually flush the process
+
+#### MacOS
+
+UDS K3d's NVIDIA GPU support does not work on MacOS.
+
+#### Windows (WSL2)
+
+The NVIDIA GPU Operator does not work on WSL2 as of version v24.3.0 (see [issue](https://github.com/NVIDIA/gpu-operator/issues/318)); however, the NVIDIA Device Plugin, by itself, does work as of version 0.15.0-rc1 (see [comment](https://github.com/NVIDIA/k8s-device-plugin/issues/332#issuecomment-1927997436)).
+
+To get around this issue, the recommended course of action is to install UDS K3d without the `cuda` flavor, and then deploy the NVIDIA Device Plugin separately. Below are the steps for doing so:
+
+1. Run `uds run default` or `uds zarf package deploy oci://justinthelaw/uds-k3d:${VERSION} --confirm`
+2. Create an `nvidia-device-plugin.yaml` manifest like the one below, and a deploy it with `uds zarf tools kubectl apply -f nvidia-device-plugin.yaml`
+
+  ```yaml
+  apiVersion: node.k8s.io/v1
+  kind: RuntimeClass
+  metadata:
+    name: nvidia
+  handler: nvidia
+  ---
+  apiVersion: apps/v1
+  kind: DaemonSet
+  metadata:
+    name: nvidia-device-plugin-daemonset
+    namespace: kube-system
+  spec:
+    selector:
+      matchLabels:
+        name: nvidia-device-plugin-daemonset
+    updateStrategy:
+      type: RollingUpdate
+    template:
+      metadata:
+        labels:
+          name: nvidia-device-plugin-daemonset
+      spec:
+        runtimeClassName: nvidia # Explicitly request the runtime
+        tolerations:
+        - key: nvidia.com/gpu
+          operator: Exists
+          effect: NoSchedule
+        # Mark this pod as a critical add-on; when enabled, the critical add-on
+        # scheduler reserves resources for critical add-on pods so that they can
+        # be rescheduled after a failure.
+        # See https://kubernetes.io/docs/tasks/administer-cluster/guaranteed-scheduling-critical-addon-pods/
+        priorityClassName: "system-node-critical"
+        containers:
+        - image: nvcr.io/nvidia/k8s-device-plugin:v0.15.0-rc.2
+          name: nvidia-device-plugin-ctr
+          env:
+            - name: PASS_DEVICE_SPECS
+              value: "true"
+            - name: FAIL_ON_INIT_ERROR
+              value: "true"
+            - name: DEVICE_LIST_STRATEGY
+              value: envvar
+            - name: DEVICE_ID_STRATEGY
+              value: uuid
+            - name: NVIDIA_VISIBLE_DEVICES
+              value: all
+            - name: NVIDIA_DRIVER_CAPABILITIES
+              value: compute,utility
+            - name: MPS_ROOT
+              value: /run/nvidia/mps
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+          - name: device-plugin
+            mountPath: /var/lib/kubelet/device-plugins
+        volumes:
+        - name: device-plugin
+          hostPath:
+            path: /var/lib/kubelet/device-plugins
+  ```
