@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.9.3](https://github.com/justinthelaw/uds-k3d/compare/v0.9.2...v0.9.3) (2024-10-08)
+
+
+### Bug Fixes
+
+* gpu docs and wsl issues ([#10](https://github.com/justinthelaw/uds-k3d/issues/10)) ([c3a25ca](https://github.com/justinthelaw/uds-k3d/commit/c3a25ca1a7cd7af94f3c3034bb8c95e0efa01dfc))
+
+
+### Miscellaneous
+
+* release 0.9.3 ([9c53bbf](https://github.com/justinthelaw/uds-k3d/commit/9c53bbf9c08b1146db941fa3171d2d1ed60db9a4))
+
 ## [0.9.2](https://github.com/justinthelaw/uds-k3d/compare/v0.9.1...v0.9.2) (2024-10-08)
 
 
