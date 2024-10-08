@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.9.2](https://github.com/justinthelaw/uds-k3d/compare/v0.9.1...v0.9.2) (2024-10-08)
+
+
+### Bug Fixes
+
+* tag and release workflow ([#5](https://github.com/justinthelaw/uds-k3d/issues/5)) ([c26e575](https://github.com/justinthelaw/uds-k3d/commit/c26e5750144cae7ac78f16607655afbe0f12bf32))
+* tag with write-all ([#6](https://github.com/justinthelaw/uds-k3d/issues/6)) ([5e2c763](https://github.com/justinthelaw/uds-k3d/commit/5e2c7636ac10f06a421b8a9b37133e41916dbaf9))
+
 ## [0.9.1](https://github.com/justinthelaw/uds-k3d/compare/v0.9.0...v0.9.1) (2024-10-08)
 
 
