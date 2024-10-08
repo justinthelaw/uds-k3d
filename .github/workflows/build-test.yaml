@@ -31,7 +31,6 @@ jobs:
           ghToken: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build the custom k3s image
-        if: ${{matrix.image}} != "rancher/k3s"
         run: uds run build-image --set VERSION=${{matrix.version}} --no-progress
 
       - name: Create and deploy the uds-k3d package
