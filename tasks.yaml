@@ -41,14 +41,14 @@ tasks:
 
   - name: validate
     actions:
-      - description: Validate coredns is up
+      - description: "Validate CoreDNS is up"
         wait:
           cluster:
             kind: Pod
             name: "k8s-app=kube-dns"
             namespace: kube-system
             condition: Ready
-      - description: Validate coredns is resolving *.uds.dev internally
+      - description: "Validate CoreDNS is resolving *.uds.dev internally"
         cmd: |
           set -e
           FOO_IP=$(uds zarf tools kubectl run dig-test --image=arunvelsriram/utils -q --restart=Never --rm -i -- dig +short foo.uds.dev)
@@ -58,16 +58,30 @@ tasks:
             echo "CoreDNS patch failed, foo.uds.dev is resolving to 127.0.0.1"
             exit 1
           fi
-      - description: Validate zarf init
+      - description: "Validate zarf init"
         cmd: |
           set -e
           uds zarf tools download-init --no-progress
           # Test zarf init due to containerd issue - https://github.com/justinthelaw/zarf/issues/592
           uds zarf init --confirm --no-progress
 
+  - name: validate-cuda
+    description: "Run a CUDA test workload in-cluster"
+    actions:
+      - description: "Deploy the device query test pod to the cluster"
+        cmd: |
+          uds zarf tools kubectl apply -f tests/cuda-device-query.yaml
+      - description: "Await test completion and then display the test results"
+        cmd: |
+          uds zarf tools wait-for Pod gpu-pod '{.status.phase}'=Succeeded -n default --no-progress
+          uds zarf tools kubectl logs -l app=gpu-pod -n default
+      - description: "Remove the completed test pod"
+        cmd: |
+          uds zarf tools kubectl delete Pod gpu-pod
+
   - name: build-cuda-image
     actions:
-      - description: Build the CUDA K3s image
+      - description: "Build the CUDA K3s image"
         cmd: |
           docker build -t ghcr.io/justinthelaw/uds-k3d/cuda-k3s:${VERSION}-cuda-${CUDA_VERSION} \
             --build-arg K3S_TAG=${VERSION} \
@@ -76,7 +90,7 @@ tasks:
 
   - name: publish-cuda-image
     actions:
-      - description: Publish the CUDA K3s image
+      - description: "Publish the CUDA K3s image"
         cmd: |
           docker buildx build --push \
             --platform linux/amd64 \
