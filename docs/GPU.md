@@ -72,6 +72,12 @@ The following additional K3s arg must be provided to the UDS task:
 uds run default-cuda --set K3D_EXTRA_ARGS="--gpus=all"
 ```
 
+If running from the upstream package, the command would look like this:
+
+```bash
+uds zarf package deploy oci://justinthelaw/uds-k3d:${VERSION}-cuda --set K3D_EXTRA_ARGS="--gpus=all" --confirm 
+```
+
 ### Tests
 
 This repository includes two CUDA workload tests that can be executed:
