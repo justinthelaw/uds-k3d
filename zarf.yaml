@@ -152,27 +152,10 @@ components:
     actions:
       onDeploy:
         after:
-          - description: "Validate nvidia-operator-validator is up"
-            wait:
-              cluster:
-                kind: Pod
-                name: app=nvidia-operator-validator
-                namespace: nvidia-gpu-operator
-                condition: "'{.status.conditions[2].status}'=True"
-            maxTotalSeconds: 300
-          - description: "Validate gpu-feature-discovery is up"
-            wait:
-              cluster:
-                kind: Pod
-                name: app=gpu-feature-discovery
-                namespace: nvidia-gpu-operator
-                condition: "'{.status.conditions[2].status}'=True"
-            maxTotalSeconds: 300
           - description: "Validate nvidia-device-plugin-daemonset is up"
             wait:
               cluster:
-                kind: Pod
+                kind: Daemonset
                 name: app=nvidia-device-plugin-daemonset
-                namespace: nvidia-gpu-operator
-                condition: "'{.status.conditions[2].status}'=True"
+                namespace: kube-system
             maxTotalSeconds: 300
