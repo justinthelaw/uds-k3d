@@ -83,7 +83,7 @@ tasks:
           uds zarf tools kubectl apply -f tests/${CUDA_TEST}.yaml
       - description: "Await test completion and then display the test results"
         cmd: |
-          uds zarf tools wait-for Pod cuda-test-pod '{.status.phase}'=Succeeded -n default --no-progress --timeout 120
+          uds zarf tools wait-for Pod cuda-test-pod '{.status.phase}'=Succeeded -n default --no-progress --timeout 120s
           uds zarf tools kubectl logs -l app=cuda-test-pod -n default
       - description: "Remove the completed test pod"
         cmd: |
