@@ -68,9 +68,9 @@ uds zarf package deploy oci://justinthelaw/uds-k3d:${VERSION}-cuda --confirm
 
 <!-- x-release-please-end -->
 
-##### Windows (WSL)
+#### Windows (WSL2)
 
-The following additional K3s arg provided in WSL:
+The following additional K3s arg must be provided when using this in WSL2:
 
 ```bash
 # Prepend to the desired deploy method, Local or Remote
@@ -82,8 +82,8 @@ The following additional K3s arg provided in WSL:
 This repository includes two CUDA workload tests that can be executed:
 
 ```bash
-uds run validate-cuda
-uds run validate-cuda --set CUDA_TEST="cuda-vector-add"
+uds run validate-cuda # device info query
+uds run validate-cuda --set CUDA_TEST="cuda-vector-add" # vector addition
 ```
 
 ### Troubleshooting
