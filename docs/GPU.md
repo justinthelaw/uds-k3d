@@ -68,9 +68,14 @@ uds zarf package deploy oci://justinthelaw/uds-k3d:${VERSION}-cuda --confirm
 
 <!-- x-release-please-end -->
 
-This package is published via CI, but can be created locally with the following command:
+### Tests
 
-`uds zarf package create --flavor cuda --confirm`
+This repository includes two CUDA workload tests that can be executed:
+
+```bash
+uds run validate-cuda
+uds run validate-cuda --set CUDA_TEST="cuda-vector-add"
+```
 
 ### Troubleshooting
 
