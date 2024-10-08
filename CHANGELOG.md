@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.10.0](https://github.com/justinthelaw/uds-k3d/compare/v0.9.4...v0.10.0) (2024-10-08)
+
+
+### Features
+
+* expose gpus automagically ([#13](https://github.com/justinthelaw/uds-k3d/issues/13)) ([edaaeac](https://github.com/justinthelaw/uds-k3d/commit/edaaeace5ca498d21dfc7f4caa4ba5b6c62f4838))
+
 ## [0.9.4](https://github.com/justinthelaw/uds-k3d/compare/v0.9.3...v0.9.4) (2024-10-08)
 
 
