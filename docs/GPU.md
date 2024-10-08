@@ -68,6 +68,15 @@ uds zarf package deploy oci://justinthelaw/uds-k3d:${VERSION}-cuda --confirm
 
 <!-- x-release-please-end -->
 
+##### Windows (WSL)
+
+The following additional K3s arg provided in WSL:
+
+```bash
+# Prepend to the desired deploy method, Local or Remote
+--set K3D_EXTRA_ARGS="--k3s-arg --gpus=all@server:*" 
+```
+
 ### Tests
 
 This repository includes two CUDA workload tests that can be executed:

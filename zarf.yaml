@@ -68,10 +68,6 @@ components:
               echo "ghcr.io/justinthelaw/uds-k3d/cuda-k3s:${ZARF_VAR_K3D_IMAGE_VERSION}-cuda-${ZARF_VAR_CUDA_IMAGE}"
             setVariables:
               - name: K3D_IMAGE
-          - cmd: |
-              echo "${ZARF_VAR_K3D_EXTRA_ARGS} --k3s-arg --gpus=all@server:*"
-            setVariables:
-              - name: K3D_EXTRA_ARGS
 
   - name: create-cluster
     required: true
@@ -84,12 +80,13 @@ components:
               -p "80:80@server:*" \
               -p "443:443@server:*" \
               --api-port 6550 \
+              ${ZARF_VAR_K3D_EXTRA_ARGS} \
               --k3s-arg "--disable=traefik@server:*" \
               --k3s-arg "--disable=metrics-server@server:*" \
               --k3s-arg "--disable=servicelb@server:*" \
               --k3s-arg "--disable=local-storage@server:*" \
-              --image ${ZARF_VAR_K3D_IMAGE} ${ZARF_VAR_K3D_EXTRA_ARGS} \
-              ${ZARF_VAR_CLUSTER_NAME}
+              --image ${ZARF_VAR_K3D_IMAGE} \
+              "${ZARF_VAR_CLUSTER_NAME}"
             description: "Create the cluster"
         onSuccess:
           - cmd: |
