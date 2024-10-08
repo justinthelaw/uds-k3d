@@ -52,7 +52,7 @@ components:
       onDeploy:
         before:
           - cmd: |
-              echo ${ZARF_VAR_K3D_IMAGE_NAME}:${ZARF_VAR_K3D_IMAGE_VERSION}
+              echo "${ZARF_VAR_K3D_IMAGE_NAME}:${ZARF_VAR_K3D_IMAGE_VERSION}"
             setVariables:
               - name: K3D_IMAGE
 
@@ -107,7 +107,7 @@ components:
       onDeploy:
         before:
           - cmd: uds zarf tools kubectl get nodes -o=jsonpath='{.items[0].status.addresses[?(@.type=="InternalIP")].address}' | cut -d'.' -f1-3
-            description: "Load network ip base for MetalLB"
+            description: "Load network base IP for MetalLB"
             setVariables:
               - name: BASE_IP
         after:
