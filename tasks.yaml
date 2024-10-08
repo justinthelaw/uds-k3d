@@ -15,7 +15,7 @@ tasks:
     description: "Build and deploy uds-k3d"
     actions:
       - description: "Build the uds-k3d package"
-        cmd: "uds zarf package create --confirm --no-progress"
+        cmd: "rm -rf zarf-package-uds-k3d-*.tar.zst && uds zarf package create --confirm --no-progress"
 
       - description: "Deploy the uds-k3d package"
         cmd: |
@@ -30,7 +30,7 @@ tasks:
     description: "Build and deploy uds-k3d with CUDA support"
     actions:
       - description: "Build the uds-k3d CUDA package"
-        cmd: "uds zarf package create --flavor cuda --confirm --no-progress"
+        cmd: "rm -rf zarf-package-uds-k3d-*.tar.zst && uds zarf package create --flavor cuda --confirm --no-progress"
 
       - description: "Deploy the uds-k3d CUDA package"
         cmd: |

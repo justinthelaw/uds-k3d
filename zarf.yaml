@@ -155,7 +155,7 @@ components:
           - description: "Validate nvidia-device-plugin-daemonset is up"
             wait:
               cluster:
-                kind: Daemonset
+                kind: Pod
                 name: app=nvidia-device-plugin-daemonset
                 namespace: kube-system
                 # Ensure the device plugin is healthy, the minimum required to begin running CUDA workloads
