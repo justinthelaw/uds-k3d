@@ -8,7 +8,10 @@ To use the NVIDIA CUDA K3s image when bootstrapping a UDS K3d cluster, execute t
 
 <!-- x-release-please-start-version -->
 
-`uds zarf package deploy oci://justinthelaw/uds-k3d:0.9.0 --confirm`
+```bash
+export VERSION=0.9.0
+uds zarf package deploy oci://justinthelaw/uds-k3d:${VERSION}-cuda --confirm
+```
 
 <!-- x-release-please-end -->
 
