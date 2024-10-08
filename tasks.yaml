@@ -14,10 +14,10 @@ tasks:
   - name: default
     description: "Build and deploy uds-k3d"
     actions:
-      - description: "Build UDS K3d package"
+      - description: "Build the uds-k3d package"
         cmd: "uds zarf package create --confirm --no-progress"
 
-      - description: "Deploy UDS K3d package"
+      - description: "Deploy the uds-k3d package"
         cmd: |
           uds zarf package deploy zarf-package-uds-k3d-*.tar.zst \
             --set K3D_IMAGE_NAME=${IMAGE_NAME} \
@@ -29,10 +29,10 @@ tasks:
   - name: default-cuda
     description: "Build and deploy uds-k3d with CUDA support"
     actions:
-      - description: "Build UDS K3d CUDA package"
+      - description: "Build the uds-k3d CUDA package"
         cmd: "uds zarf package create --flavor cuda --confirm --no-progress"
 
-      - description: "Deploy UDS K3d CUDA package"
+      - description: "Deploy the uds-k3d CUDA package"
         cmd: |
           uds zarf package deploy zarf-package-uds-k3d-*.tar.zst \
             --set K3D_EXTRA_ARGS="${K3D_EXTRA_ARGS}" \
