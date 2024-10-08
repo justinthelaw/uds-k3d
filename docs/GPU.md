@@ -148,7 +148,7 @@ The NVIDIA GPU Operator does not work on WSL2 as of version v24.3.0 (see [issue]
 
 To get around this issue, the recommended course of action is to install UDS K3d without the `cuda` flavor, and then deploy the NVIDIA Device Plugin separately. Below are the steps for doing so:
 
-1. Run `uds run default` or `uds zarf package deploy oci://justinthelaw/uds-k3d:${VERSION} --confirm`
+1. Run `uds run default --set K3D_EXTRA_ARGS="--gpus=all"` or `uds zarf package deploy oci://justinthelaw/uds-k3d:${VERSION} --confirm --set K3D_EXTRA_ARGS="--gpus=all"`
 2. Create an `nvidia-device-plugin.yaml` manifest like the one below, and a deploy it with `uds zarf tools kubectl apply -f nvidia-device-plugin.yaml`
 
   ```yaml
