@@ -29,7 +29,7 @@ jobs:
 
     strategy:
       matrix:
-        k3s_version: [v1.30.4-k3s1]
+        k3s_version: ["v1.29.8-k3s1", "v1.30.4-k3s1", "v1.31.0-k3s1"]
 
     permissions:
       contents: read
@@ -57,7 +57,7 @@ jobs:
 
     strategy:
       matrix:
-        k3s_version: [v1.30.4-k3s1]
+        k3s_version: ["v1.29.8-k3s1", "v1.30.4-k3s1", "v1.31.0-k3s1"]
         cuda_version:
           [
             11.8.0-base-ubuntu22.04,
