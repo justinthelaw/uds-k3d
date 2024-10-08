@@ -80,11 +80,11 @@ components:
               -p "80:80@server:*" \
               -p "443:443@server:*" \
               --api-port 6550 \
-              ${ZARF_VAR_K3D_EXTRA_ARGS} \
               --k3s-arg "--disable=traefik@server:*" \
               --k3s-arg "--disable=metrics-server@server:*" \
               --k3s-arg "--disable=servicelb@server:*" \
               --k3s-arg "--disable=local-storage@server:*" \
+              ${ZARF_VAR_K3D_EXTRA_ARGS} \
               --image ${ZARF_VAR_K3D_IMAGE} \
               "${ZARF_VAR_CLUSTER_NAME}"
             description: "Create the cluster"
