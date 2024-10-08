@@ -30,9 +30,6 @@ jobs:
           registry1Password: ${{ secrets.IRON_BANK_ROBOT_PASSWORD }}
           ghToken: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build the custom k3s image
-        run: uds run build-image --set VERSION=${{matrix.version}} --no-progress
-
       - name: Create and deploy the uds-k3d package
         run: uds run --set VERSION=${{matrix.version}} --no-progress
 
