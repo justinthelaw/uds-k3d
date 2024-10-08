@@ -65,9 +65,13 @@ components:
       onDeploy:
         before:
           - cmd: |
-              echo ghcr.io/justinthelaw/uds-k3d/cuda-k3s:${ZARF_VAR_K3D_IMAGE_VERSION}-cuda-${ZARF_VAR_CUDA_IMAGE}
+              echo "ghcr.io/justinthelaw/uds-k3d/cuda-k3s:${ZARF_VAR_K3D_IMAGE_VERSION}-cuda-${ZARF_VAR_CUDA_IMAGE}"
             setVariables:
               - name: K3D_IMAGE
+          - cmd: |
+              echo "${ZARF_VAR_K3D_EXTRA_ARGS} --k3s-arg --gpus=all@server:*"
+            setVariables:
+              - name: K3D_EXTRA_ARGS
 
   - name: create-cluster
     required: true

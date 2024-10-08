@@ -60,7 +60,7 @@ You can set extra k3d args by setting the deploy-time ZARF_VAR_K3D_EXTRA_ARGS. S
 package:
   deploy:
     set:
-      k3d_extra_args: "--k3s-arg --<arg2>=<value>"
+      k3d_extra_args: "--k3s-arg --<arg2>=<value>@server:*"
 ```
 
 ### Configure MinIO
