@@ -74,6 +74,7 @@ tasks:
       - description: "Await test completion and then display the test results"
         cmd: |
           uds zarf tools wait-for Pod gpu-pod '{.status.phase}'=Succeeded -n default --no-progress
+          echo "CUDA Device Query Test Results:"
           uds zarf tools kubectl logs -l app=gpu-pod -n default
       - description: "Remove the completed test pod"
         cmd: |

@@ -158,4 +158,6 @@ components:
                 kind: Daemonset
                 name: app=nvidia-device-plugin-daemonset
                 namespace: kube-system
+                # Ensure the device plugin is healthy, the minimum required to begin running CUDA workloads
+                condition: "'{.status.conditions[2].status}'=True"
             maxTotalSeconds: 300
