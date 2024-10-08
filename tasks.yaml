@@ -9,6 +9,8 @@ variables:
     default: ""
   - name: NGINX_EXTRA_PORTS
     default: "[]"
+  - name: CUDA_TEST
+    default: "cuda-device-query"
 
 tasks:
   - name: default
@@ -70,7 +72,7 @@ tasks:
     actions:
       - description: "Deploy the device query test pod to the cluster"
         cmd: |
-          uds zarf tools kubectl apply -f tests/cuda-device-query.yaml
+          uds zarf tools kubectl apply -f tests/${CUDA_TEST}.yaml
       - description: "Await test completion and then display the test results"
         cmd: |
           uds zarf tools wait-for Pod gpu-pod '{.status.phase}'=Succeeded -n default --no-progress

@@ -60,7 +60,7 @@ components:
     required: true
     only:
       flavor: cuda
-    description: "Overwrites the K3s base image variable to a CUDA K3s image"
+    description: "Overwrites the K3s base image variable to be the CUDA K3s image"
     actions:
       onDeploy:
         before:
@@ -159,5 +159,14 @@ components:
                 name: app=nvidia-device-plugin-daemonset
                 namespace: kube-system
                 # Ensure the device plugin is healthy, the minimum required to begin running CUDA workloads
+                condition: "'{.status.conditions[2].status}'=True"
+            maxTotalSeconds: 300
+          - description: "Validate nvidia-operator-validator is up"
+            wait:
+              cluster:
+                kind: Pod
+                name: app=nvidia-operator-validator
+                namespace: kube-system
+                # Ensure the validator job ends
                 condition: "'{.status.conditions[2].status}'=True"
             maxTotalSeconds: 300

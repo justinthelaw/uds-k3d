@@ -47,6 +47,16 @@ UDS K3d comes with optional base images that provide GPU scheduling in the clust
 
 ### Usage
 
+#### Local Build
+
+To use the NVIDIA CUDA K3s image when bootstrapping a UDS K3d cluster, execute the following:
+
+```bash
+uds run default-cuda
+```
+
+#### Remote
+
 To use the NVIDIA CUDA K3s image when bootstrapping a UDS K3d cluster, execute the following:
 
 <!-- x-release-please-start-version -->
