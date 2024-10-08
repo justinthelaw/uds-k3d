@@ -48,7 +48,6 @@ jobs:
 
       - name: Publish CUDA K3s Image
         uses: ./.github/workflows/publish-image.yaml
-          uds zarf package create --confirm -a amd64 -o oci://ghcr.io/justinthelaw/packages --flavor cuda
 
       - name: Publish the CUDA capability
         run: |
