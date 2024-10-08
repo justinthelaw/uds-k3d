@@ -148,7 +148,7 @@ components:
         version: v24.3.0
         namespace: kube-system
         valuesFiles:
-          - "https://raw.githubusercontent.com/defenseunicorns/uds-rke2/refs/heads/main/packages/nvidia-gpu-operator/values/nvidia-gpu-operator-values.yaml?token=GHSAT0AAAAAACWDPCWNRXMEM7KQZ5WETWW6ZYFI5HA"
+          - "values/nvidia-gpu-operator-values.yaml"
     actions:
       onDeploy:
         after:
