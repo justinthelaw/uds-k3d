@@ -1,20 +1,16 @@
-name: Publish k3s image
+name: Publish CUDA K3s image
 
-# Workflow is not currently being used, switched to a manual trigger only
-on: workflow_dispatch
-  # push:
-  #   branches:
-  #     - main
-  #   paths:
-  #     - docker/**
-  #     - .github/workflows/publish-image.yaml
+on:
+  workflow_dispatch:
+  workflow_call:
 
 jobs:
   publish-k3s-image:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        version: ["v1.2.3-k3s1"] # Placeholder
+        version: ["v1.30.4-k3s1"]
+        cuda_version: ["12.6.1-base-ubuntu22.04"]
 
     permissions:
       contents: read
@@ -29,15 +25,13 @@ jobs:
         if: always()
         uses: defenseunicorns/uds-common/.github/actions/setup@e3008473beab00b12a94f9fcc7340124338d5c08 # v0.13.1
         with:
-          username: ${{secrets.IRON_BANK_ROBOT_USERNAME}}
-          password: ${{secrets.IRON_BANK_ROBOT_PASSWORD}}
+          registry1Username: ${{ secrets.IRON_BANK_ROBOT_USERNAME }}
+          registry1Password: ${{ secrets.IRON_BANK_ROBOT_PASSWORD }}
+          ghToken: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Login to GHCR
-        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3
-        with:
-          registry: ghcr.io
-          username: dummy
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Publish the custom k3s image
-        run: uds run publish-image --set VERSION=${{matrix.version}} --no-progress
+      - name: Publish the CUDA K3s image
+        run: |
+          uds run publish-image \
+            --set VERSION=${{matrix.version}} \
+            --set CUDA_VERSION=${{matrix.version}} \
+            --no-progress

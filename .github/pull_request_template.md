@@ -17,4 +17,4 @@ Relates to #
 ## Checklist before merging
 
 - [ ] Test, docs, adr added or updated as needed
-- [ ] [Contributor Guide Steps](https://github.com/defenseunicorns/uds-k3d/blob/main/CONTRIBUTING.md) followed
+- [ ] [Contributor Guide Steps](https://github.com/justinthelaw/uds-k3d/blob/main/CONTRIBUTING.md) followed

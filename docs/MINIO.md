@@ -104,7 +104,7 @@ This example will override the default users and buckets provisioned in the mini
 
 packages:
   - name: uds-k3d-dev
-    repository: ghcr.io/defenseunicorns/packages/uds-k3d
+    repository: ghcr.io/justinthelaw/packages/uds-k3d
     ref: 0.2.0
     overrides:
       uds-dev-stack:
@@ -135,7 +135,7 @@ This example will show how to expose the ability to override the default users, 
 
 packages:
   - name: uds-k3d-dev
-    repository: ghcr.io/defenseunicorns/packages/uds-k3d
+    repository: ghcr.io/justinthelaw/packages/uds-k3d
     ref: 0.2.0
     overrides:
       uds-dev-stack:
