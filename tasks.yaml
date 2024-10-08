@@ -1,3 +1,5 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.16.0/tasks.schema.json
+
 variables:
   - name: VERSION
     default: "v1.30.4-k3s1"
@@ -6,6 +8,8 @@ variables:
   - name: IMAGE_NAME
     default: "rancher/k3s"
   - name: K3D_EXTRA_ARGS
+    default: ""
+  - name: ZARF_CONFIG
     default: ""
   - name: NGINX_EXTRA_PORTS
     default: "[]"
@@ -20,6 +24,8 @@ tasks:
         cmd: "rm -rf zarf-package-uds-k3d-*.tar.zst && uds zarf package create --confirm --no-progress"
 
       - description: "Deploy the uds-k3d package"
+        env:
+          - ZARF_CONFIG=${ZARF_CONFIG}
         cmd: |
           uds zarf package deploy zarf-package-uds-k3d-*.tar.zst \
             --set K3D_IMAGE_NAME=${IMAGE_NAME} \
@@ -35,6 +41,8 @@ tasks:
         cmd: "rm -rf zarf-package-uds-k3d-*.tar.zst && uds zarf package create --flavor cuda --confirm --no-progress"
 
       - description: "Deploy the uds-k3d CUDA package"
+        env:
+          - ZARF_CONFIG=${ZARF_CONFIG}
         cmd: |
           uds zarf package deploy zarf-package-uds-k3d-*.tar.zst \
             --set K3D_EXTRA_ARGS="${K3D_EXTRA_ARGS}" \
@@ -75,9 +83,8 @@ tasks:
           uds zarf tools kubectl apply -f tests/${CUDA_TEST}.yaml
       - description: "Await test completion and then display the test results"
         cmd: |
-          uds zarf tools wait-for Pod cuda-test-pod '{.status.phase}'=Succeeded -n default --no-progress
+          uds zarf tools wait-for Pod cuda-test-pod '{.status.phase}'=Succeeded -n default --no-progress --timeout 120
           uds zarf tools kubectl logs -l app=cuda-test-pod -n default
-        timeout: 120
       - description: "Remove the completed test pod"
         cmd: |
           uds zarf tools kubectl delete Pod cuda-test-pod

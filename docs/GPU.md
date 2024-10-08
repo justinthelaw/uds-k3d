@@ -66,11 +66,19 @@ uds zarf package deploy oci://justinthelaw/uds-k3d:${VERSION}-cuda --confirm
 
 #### Windows (WSL2)
 
-The following additional K3s arg must be provided when using this in WSL2:
+The following additional K3s arg must be provided to a `zarf-config.yaml` when using this in WSL2:
+
+```yaml
+package:
+  deploy:
+    set:
+      k3d_extra_args: --k3s-arg "--gpus=all@server:*"
+```
+
+Then use the following command to create the cluster:
 
 ```bash
-# Prepend to the desired deploy method, Local or Remote
---set K3D_EXTRA_ARGS="--k3s-arg --gpus=all@server:*" 
+uds run default-cuda --set ZARF_CONFIG=zarf-config.yaml
 ```
 
 ### Tests
