@@ -1,13 +1,8 @@
-name: Publish k3s image
+name: Publish CUDA K3s image
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-    paths:
-      - docker/**
-      - .github/workflows/publish-image.yaml
+  workflow_call:
 
 jobs:
   publish-k3s-image:
