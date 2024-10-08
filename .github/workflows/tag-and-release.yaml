@@ -27,9 +27,43 @@ jobs:
     if: ${{ needs.tag-new-version.outputs.release_created == 'true'}}
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        k3s_version: [v1.30.4-k3s1]
+
     permissions:
       contents: read
       packages: write
+
+    steps:
+      - uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4
+
+      - name: Setup UDS
+        uses: defenseunicorns/uds-common/.github/actions/setup@e3008473beab00b12a94f9fcc7340124338d5c08 # v0.13.1
+        with:
+          registry1Username: ${{ secrets.IRON_BANK_ROBOT_USERNAME }}
+          registry1Password: ${{ secrets.IRON_BANK_ROBOT_PASSWORD }}
+          ghToken: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish the base capability
+        run: |
+          uds zarf package create --confirm -a arm64 -o oci://ghcr.io/justinthelaw/packages --set K3D_IMAGE_VERSION=${{ matrix.k3s_version }}
+          uds zarf package create --confirm -a amd64 -o oci://ghcr.io/justinthelaw/packages --set K3D_IMAGE_VERSION=${{ matrix.k3s_version }}
+
+  publish-uds-cuda-package:
+    needs: tag-new-version
+    if: ${{ needs.tag-new-version.outputs.release_created == 'true'}}
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        k3s_version: [v1.30.4-k3s1]
+        cuda_version:
+          [
+            11.8.0-base-ubuntu22.04,
+            12.1.0-base-ubuntu22.04,
+            12.5.0-base-ubuntu22.04,
+          ]
 
     steps:
       - uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4
@@ -43,16 +77,11 @@ jobs:
           registry1Password: ${{ secrets.IRON_BANK_ROBOT_PASSWORD }}
           ghToken: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Publish the base capability
-        run: |
-          uds zarf package create --confirm -a arm64 -o oci://ghcr.io/justinthelaw/packages
-          uds zarf package create --confirm -a amd64 -o oci://ghcr.io/justinthelaw/packages
-
       - name: Publish the CUDA K3s image
         run: |
           uds run publish-image \
-            --set VERSION="v1.30.4-k3s1" \
-            --set CUDA_VERSION="12.6.1-base-ubuntu22.04" \
+            --set VERSION="${{ matrix.k3s_version }}" \
+            --set CUDA_VERSION="${{ matrix.cuda_version }}" \
             --no-progress
 
       - name: Publish the CUDA capability

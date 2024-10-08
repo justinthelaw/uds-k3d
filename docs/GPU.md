@@ -11,10 +11,6 @@ UDS K3d comes with optional base images that provide GPU scheduling in the clust
 - Ensure that the proper [NVIDIA drivers](https://www.nvidia.com/download/index.aspx) are installed (>=525.60).
 - Follow the [driver download](https://www.nvidia.com/download/index.aspx) by identifying your hardware from the provided list.
 
-### CUDA Toolkit
-
-- Follow the [instructions](https://developer.nvidia.com/cuda-downloads) to download the CUDA toolkit (>=12.2x). This toolkit is only required on the system that is building the Zarf Packages.
-
 ### NVIDIA Container Toolkit
 
 - [Read the pre-requisites for installation and follow the instructions](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#installing-with-apt) to download and install the NVIDIA container toolkit (>=1.14).
@@ -68,9 +64,28 @@ uds zarf package deploy oci://justinthelaw/uds-k3d:${VERSION}-cuda --confirm
 
 <!-- x-release-please-end -->
 
-This package is published via CI, but can be created locally with the following command:
+#### Windows (WSL2)
 
-`uds zarf package create --flavor cuda --confirm`
+The following additional K3s arg must be provided to the UDS task:
+
+```bash
+uds run default-cuda --set K3D_EXTRA_ARGS="--gpus=all"
+```
+
+If running from the upstream package, the command would look like this:
+
+```bash
+uds zarf package deploy oci://justinthelaw/uds-k3d:${VERSION}-cuda --set K3D_EXTRA_ARGS="--gpus=all" --confirm 
+```
+
+### Tests
+
+This repository includes two CUDA workload tests that can be executed:
+
+```bash
+uds run validate-cuda # device info query
+uds run validate-cuda --set CUDA_TEST="cuda-vector-add" # vector addition
+```
 
 ### Troubleshooting
 

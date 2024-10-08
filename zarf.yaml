@@ -25,7 +25,7 @@ variables:
 
   - name: CUDA_IMAGE
     description: "CUDA image to use"
-    default: "12.6.1-base-ubuntu22.04"
+    default: "12.1.0-base-ubuntu22.04"
 
   - name: K3D_EXTRA_ARGS
     description: "Optionally pass k3d arguments to the default"
@@ -52,7 +52,7 @@ components:
       onDeploy:
         before:
           - cmd: |
-              echo ${ZARF_VAR_K3D_IMAGE_NAME}:${ZARF_VAR_K3D_IMAGE_VERSION}
+              echo "${ZARF_VAR_K3D_IMAGE_NAME}:${ZARF_VAR_K3D_IMAGE_VERSION}"
             setVariables:
               - name: K3D_IMAGE
 
@@ -65,7 +65,7 @@ components:
       onDeploy:
         before:
           - cmd: |
-              echo ghcr.io/justinthelaw/uds-k3d/cuda-k3s:${ZARF_VAR_K3D_IMAGE_VERSION}-cuda-${ZARF_VAR_CUDA_IMAGE}
+              echo "ghcr.io/justinthelaw/uds-k3d/cuda-k3s:${ZARF_VAR_K3D_IMAGE_VERSION}-cuda-${ZARF_VAR_CUDA_IMAGE}"
             setVariables:
               - name: K3D_IMAGE
 
@@ -84,8 +84,9 @@ components:
               --k3s-arg "--disable=metrics-server@server:*" \
               --k3s-arg "--disable=servicelb@server:*" \
               --k3s-arg "--disable=local-storage@server:*" \
-              --image ${ZARF_VAR_K3D_IMAGE} ${ZARF_VAR_K3D_EXTRA_ARGS} \
-              ${ZARF_VAR_CLUSTER_NAME}
+              ${ZARF_VAR_K3D_EXTRA_ARGS} \
+              --image ${ZARF_VAR_K3D_IMAGE} \
+              "${ZARF_VAR_CLUSTER_NAME}"
             description: "Create the cluster"
         onSuccess:
           - cmd: |
@@ -106,7 +107,7 @@ components:
       onDeploy:
         before:
           - cmd: uds zarf tools kubectl get nodes -o=jsonpath='{.items[0].status.addresses[?(@.type=="InternalIP")].address}' | cut -d'.' -f1-3
-            description: "Load network ip base for MetalLB"
+            description: "Load network base IP for MetalLB"
             setVariables:
               - name: BASE_IP
         after:
