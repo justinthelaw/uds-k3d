@@ -138,9 +138,14 @@ components:
           - "values/minio-values.yaml"
 
   - name: nvidia-gpu-operator
-    required: true
+    description: "Install the NVIDIA GPU Operator for CUDA-enabled clusters"
     only:
       flavor: cuda
-    description: "Deploys the NVIDIA GPU Operator"
+    required: true
     charts:
       - name: gpu-operator
+        url: https://helm.ngc.nvidia.com/nvidia
+        version: "v24.3.0"
+        namespace: "kube-system"
+        valuesFiles:
+          - "https://raw.githubusercontent.com/defenseunicorns/uds-infrastructure/refs/heads/main/src/gpu-operator/values.yaml?token=GHSAT0AAAAAACWDPCWNVU5CGJB44YM4BRC2ZYFITTA"
