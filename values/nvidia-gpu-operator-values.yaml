@@ -58,7 +58,6 @@ validator:
       - name: WITH_WORKLOAD
         value: "false"
   driver:
-    # RKE2-specific configurations
     env:
       - name: DISABLE_DEV_CHAR_SYMLINK_CREATION
         value: "true"
@@ -73,8 +72,8 @@ operator:
   imagePullPolicy: IfNotPresent
   imagePullSecrets: []
   priorityClassName: system-node-critical
-  # Explicitly set runtime to containerd, not the default of `docker`
-  defaultRuntime: containerd
+  # Can be set to `containerd`
+  defaultRuntime: docker
   runtimeClass: nvidia
   use_ocp_driver_toolkit: false
   # cleanup CRD on chart un-install

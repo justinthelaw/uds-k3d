@@ -79,7 +79,7 @@ jobs:
 
       - name: Publish the CUDA K3s image
         run: |
-          uds run publish-image \
+          uds run publish-cuda-image \
             --set VERSION="${{ matrix.k3s_version }}" \
             --set CUDA_VERSION="${{ matrix.cuda_version }}" \
             --no-progress
