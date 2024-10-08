@@ -9,7 +9,9 @@ jobs:
   tag-new-version:
     runs-on: ubuntu-latest
 
-    permissions: write-all
+    permissions:
+      contents: write
+      packages: write
 
     outputs:
       release_created: ${{ steps.release-flag.outputs.release_created }}
@@ -47,7 +49,7 @@ jobs:
           uds zarf package create --confirm -a amd64 -o oci://ghcr.io/justinthelaw/packages
 
       - name: Publish CUDA K3s Image
-        uses: ./.github/workflows/publish-image.yaml
+        uses: .github/workflows/publish-image.yaml@main
 
       - name: Publish the CUDA capability
         run: |
