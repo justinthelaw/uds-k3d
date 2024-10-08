@@ -72,7 +72,7 @@ operator:
   imagePullPolicy: IfNotPresent
   imagePullSecrets: []
   priorityClassName: system-node-critical
-  # Can be set to `containerd`
+  # Can be set to `containerd`, `docker`, etc.
   defaultRuntime: docker
   runtimeClass: nvidia
   use_ocp_driver_toolkit: false
