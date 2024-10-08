@@ -145,7 +145,34 @@ components:
     charts:
       - name: gpu-operator
         url: https://helm.ngc.nvidia.com/nvidia
-        version: "v24.3.0"
-        namespace: "kube-system"
+        version: v24.3.0
+        namespace: kube-system
         valuesFiles:
-          - "https://raw.githubusercontent.com/defenseunicorns/uds-infrastructure/refs/heads/main/src/gpu-operator/values.yaml?token=GHSAT0AAAAAACWDPCWNVU5CGJB44YM4BRC2ZYFITTA"
+          - "https://raw.githubusercontent.com/defenseunicorns/uds-rke2/refs/heads/main/packages/nvidia-gpu-operator/values/nvidia-gpu-operator-values.yaml?token=GHSAT0AAAAAACWDPCWNRXMEM7KQZ5WETWW6ZYFI5HA"
+    actions:
+      onDeploy:
+        after:
+          - description: "Validate nvidia-operator-validator is up"
+            wait:
+              cluster:
+                kind: Pod
+                name: app=nvidia-operator-validator
+                namespace: nvidia-gpu-operator
+                condition: "'{.status.conditions[2].status}'=True"
+            maxTotalSeconds: 300
+          - description: "Validate gpu-feature-discovery is up"
+            wait:
+              cluster:
+                kind: Pod
+                name: app=gpu-feature-discovery
+                namespace: nvidia-gpu-operator
+                condition: "'{.status.conditions[2].status}'=True"
+            maxTotalSeconds: 300
+          - description: "Validate nvidia-device-plugin-daemonset is up"
+            wait:
+              cluster:
+                kind: Pod
+                name: app=nvidia-device-plugin-daemonset
+                namespace: nvidia-gpu-operator
+                condition: "'{.status.conditions[2].status}'=True"
+            maxTotalSeconds: 300
