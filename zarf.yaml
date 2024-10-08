@@ -56,7 +56,7 @@ components:
             setVariables:
               - name: K3D_IMAGE
 
-  - name: enable-cuda
+  - name: inject-cuda-image
     required: true
     only:
       flavor: cuda
@@ -68,6 +68,19 @@ components:
               echo "ghcr.io/justinthelaw/uds-k3d/cuda-k3s:${ZARF_VAR_K3D_IMAGE_VERSION}-cuda-${ZARF_VAR_CUDA_IMAGE}"
             setVariables:
               - name: K3D_IMAGE
+
+  - name: expose-gpus
+    required: true
+    only:
+      flavor: cuda
+    description: "Adds the extra K3d argument for exposing host GPUs to the cluster"
+    actions:
+      onDeploy:
+        before:
+          - cmd: |
+              echo "${ZARF_VAR_K3D_EXTRA_ARGS} --gpus=all"
+            setVariables:
+              - name: K3D_EXTRA_ARGS
 
   - name: create-cluster
     required: true
