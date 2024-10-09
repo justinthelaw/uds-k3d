@@ -27,6 +27,10 @@ variables:
     description: "CUDA image to use"
     default: "12.1.0-base-ubuntu22.04"
 
+  - name: NUMBER_OF_GPUS
+    description: "Number of GPUs to passthrough to the K3D cluster"
+    default: "all"
+
   - name: K3D_EXTRA_ARGS
     description: "Optionally pass k3d arguments to the default"
     default: ""
@@ -52,7 +56,7 @@ components:
       onDeploy:
         before:
           - cmd: |
-              echo "${ZARF_VAR_K3D_IMAGE_NAME}:${ZARF_VAR_K3D_IMAGE_VERSION}"
+              echo "${ZARF_VAR_K3S_IMAGE_REPOSITORY}:${ZARF_VAR_K3S_IMAGE_VERSION}"
             setVariables:
               - name: K3D_IMAGE
 
@@ -65,7 +69,7 @@ components:
       onDeploy:
         before:
           - cmd: |
-              echo "ghcr.io/justinthelaw/uds-k3d/cuda-k3s:${ZARF_VAR_K3D_IMAGE_VERSION}-cuda-${ZARF_VAR_CUDA_IMAGE}"
+              echo "ghcr.io/justinthelaw/uds-k3d/cuda-k3s:${ZARF_VAR_K3S_IMAGE_VERSION}-cuda-${ZARF_VAR_CUDA_IMAGE_VERSION}"
             setVariables:
               - name: K3D_IMAGE
 
@@ -78,7 +82,7 @@ components:
       onDeploy:
         before:
           - cmd: |
-              echo "${ZARF_VAR_K3D_EXTRA_ARGS} --gpus=all"
+              echo "${ZARF_VAR_K3D_EXTRA_ARGS} --gpus=${ZARF_VAR_NUMBER_OF_GPUS}"
             setVariables:
               - name: K3D_EXTRA_ARGS
 
