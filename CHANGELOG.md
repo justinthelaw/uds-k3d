@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.11.1](https://github.com/justinthelaw/uds-k3d/compare/v0.11.0...v0.11.1) (2024-10-09)
+
+
+### Bug Fixes
+
+* cuda 11.8.0 ubi8 version ([9a455e4](https://github.com/justinthelaw/uds-k3d/commit/9a455e43d8e6a789375994a5893f2cbe70c85c89))
+
 ## [0.11.0](https://github.com/justinthelaw/uds-k3d/compare/v0.10.0...v0.11.0) (2024-10-09)
 
 
