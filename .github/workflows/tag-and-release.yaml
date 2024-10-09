@@ -72,7 +72,7 @@ jobs:
             11.8.0-base-ubuntu22.04,
             12.1.0-base-ubuntu22.04,
             12.5.0-base-ubuntu22.04,
-            11.8.0-base-ubi9,
+            11.8.0-base-ubi8,
             12.1.0-base-ubi9,
             12.5.0-base-ubi9,
           ]
