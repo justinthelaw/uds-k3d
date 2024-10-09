@@ -47,8 +47,8 @@ jobs:
 
       - name: Publish the base capability
         run: |
-          uds zarf package create --confirm -a arm64 -o oci://ghcr.io/justinthelaw/packages --set K3D_IMAGE_VERSION=${{ matrix.k3s_version }}
-          uds zarf package create --confirm -a amd64 -o oci://ghcr.io/justinthelaw/packages --set K3D_IMAGE_VERSION=${{ matrix.k3s_version }}
+          uds zarf package create --confirm -a arm64 -o oci://ghcr.io/justinthelaw/packages --set K3S_IMAGE_VERSION=${{ matrix.k3s_version }}
+          uds zarf package create --confirm -a amd64 -o oci://ghcr.io/justinthelaw/packages --set K3S_IMAGE_VERSION=${{ matrix.k3s_version }}
 
   publish-uds-cuda-package:
     needs: tag-new-version
@@ -57,12 +57,16 @@ jobs:
 
     strategy:
       matrix:
-        k3s_version: ["v1.29.8-k3s1", "v1.30.4-k3s1", "v1.31.0-k3s1"]
-        cuda_version:
+        k3s_version:
+          ["v1.28.8-k3s1", "v1.29.8-k3s1", "v1.30.4-k3s1", "v1.31.0-k3s1"]
+        CUDA_IMAGE_VERSION:
           [
             11.8.0-base-ubuntu22.04,
             12.1.0-base-ubuntu22.04,
             12.5.0-base-ubuntu22.04,
+            11.8.0-base-ubi9,
+            12.1.0-base-ubi9,
+            12.5.0-base-ubi9,
           ]
 
     steps:
@@ -80,8 +84,8 @@ jobs:
       - name: Publish the CUDA K3s image
         run: |
           uds run publish-cuda-image \
-            --set VERSION="${{ matrix.k3s_version }}" \
-            --set CUDA_VERSION="${{ matrix.cuda_version }}" \
+            --set K3S_IMAGE_VERSION="${{ matrix.k3s_version }}" \
+            --set CUDA_IMAGE_VERSION="${{ matrix.CUDA_IMAGE_VERSION }}" \
             --no-progress
 
       - name: Publish the CUDA capability
