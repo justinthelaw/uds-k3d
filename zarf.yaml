@@ -176,15 +176,15 @@ components:
                 kind: Pod
                 name: app=nvidia-device-plugin-daemonset
                 namespace: kube-system
-                # Ensure the device plugin is healthy, the minimum required to begin running CUDA workloads
+                # Ensure the device plugin is healthy, which might take a while depending on the machine 
                 condition: "'{.status.conditions[2].status}'=True"
-            maxTotalSeconds: 300
+            maxTotalSeconds: 600
           - description: "Validate nvidia-operator-validator is up"
             wait:
               cluster:
                 kind: Pod
                 name: app=nvidia-operator-validator
                 namespace: kube-system
-                # Ensure the validator job ends
+                # Ensure the NVIDIA host validator job succeeds
                 condition: "'{.status.conditions[2].status}'=True"
             maxTotalSeconds: 300
