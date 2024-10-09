@@ -90,6 +90,7 @@ tasks:
       - description: "Build the CUDA K3s image"
         cmd: |
           docker build -t ghcr.io/justinthelaw/uds-k3d/cuda-k3s:${K3S_IMAGE_VERSION}-cuda-${CUDA_IMAGE_VERSION} \
+            --build-arg K3S_REPOSITORY=${K3S_IMAGE_REPOSITORY} \
             --build-arg K3S_TAG=${K3S_IMAGE_VERSION} \
             --build-arg CUDA_TAG=${CUDA_IMAGE_VERSION} \
             -f docker/Dockerfile.gpu . -q
@@ -100,5 +101,8 @@ tasks:
         cmd: |
           docker buildx build --push \
             --platform linux/amd64 \
+            --build-arg K3S_REPOSITORY=${K3S_IMAGE_REPOSITORY} \
+            --build-arg K3S_TAG=${K3S_IMAGE_VERSION} \
+            --build-arg CUDA_TAG=${CUDA_IMAGE_VERSION} \
             -t ghcr.io/justinthelaw/uds-k3d/cuda-k3s:${K3S_IMAGE_VERSION}-cuda-${CUDA_IMAGE_VERSION} \
             -f docker/Dockerfile.gpu . -q
