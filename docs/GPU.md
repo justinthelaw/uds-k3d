@@ -75,7 +75,7 @@ uds run default-cuda --set K3S_IMAGE_VERSION="v1.29.8-k3s1" --set CUDA_IMAGE_VER
 # OR
 uds zarf package deploy oci://ghcr.io/justinthelaw/packages/uds-k3d:${PACKAGE_VERSION}-cuda --confirm --set K3S_IMAGE_VERSION="v1.31.0-k3s1" --set CUDA_IMAGE_VERSION="12.5.0-base-ubuntu22.04"
 # OR
-uds zarf package deploy oci://ghcr.io/justinthelaw/packages/uds-k3d:${PACKAGE_VERSION}-cuda --confirm --set K3S_IMAGE_VERSION="v1.29.8-k3s1" --set CUDA_IMAGE_VERSION="11.8.0-base-ubi9"
+uds zarf package deploy oci://ghcr.io/justinthelaw/packages/uds-k3d:${PACKAGE_VERSION}-cuda --confirm --set K3S_IMAGE_VERSION="v1.29.8-k3s1" --set CUDA_IMAGE_VERSION="11.8.0-base-ubuntu22.04"
 ```
 
 #### Tests
