@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.11.0](https://github.com/justinthelaw/uds-k3d/compare/v0.10.0...v0.11.0) (2024-10-09)
+
+
+### Features
+
+* add ability to support additional gateway/domain ([#115](https://github.com/justinthelaw/uds-k3d/issues/115)) ([#18](https://github.com/justinthelaw/uds-k3d/issues/18)) ([2d4d96b](https://github.com/justinthelaw/uds-k3d/commit/2d4d96b7f26ced1f4abd33d9937acd27dbc844fe))
+* more variations, variation docs, and better variable names ([#19](https://github.com/justinthelaw/uds-k3d/issues/19)) ([7928ecd](https://github.com/justinthelaw/uds-k3d/commit/7928ecd2b01bd5aa3cc2e7e78ed5f4e5bc52c465))
+
+
+### Bug Fixes
+
+* GPU.md zarf deploy command ([#15](https://github.com/justinthelaw/uds-k3d/issues/15)) ([397e25d](https://github.com/justinthelaw/uds-k3d/commit/397e25d9ce67ba59843084f1007942f6efdec26b))
+* Update GPU.md typo ([#17](https://github.com/justinthelaw/uds-k3d/issues/17)) ([f38df9c](https://github.com/justinthelaw/uds-k3d/commit/f38df9c020e87c1da2e4613aff2ad647b48eadf4))
+
 ## [0.10.0](https://github.com/justinthelaw/uds-k3d/compare/v0.9.4...v0.10.0) (2024-10-08)
 
 
