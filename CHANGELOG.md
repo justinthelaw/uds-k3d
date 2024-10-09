@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.11.2](https://github.com/justinthelaw/uds-k3d/compare/v0.11.1...v0.11.2) (2024-10-09)
+
+
+### Bug Fixes
+
+* README deploy command ([59d70d9](https://github.com/justinthelaw/uds-k3d/commit/59d70d9428ccb3c6eacc8ae92321e970c709b858))
+* remove ubi8 and ubi9 mentions ([e884da6](https://github.com/justinthelaw/uds-k3d/commit/e884da67e75a01a3b2f20bb4612ab8661eec7f8b))
+
 ## [0.11.1](https://github.com/justinthelaw/uds-k3d/compare/v0.11.0...v0.11.1) (2024-10-09)
 
 
