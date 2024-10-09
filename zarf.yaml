@@ -179,7 +179,7 @@ components:
                 # Ensure the device plugin is healthy, which might take a while depending on the machine 
                 condition: "'{.status.conditions[2].status}'=True"
             maxTotalSeconds: 600
-          - description: "Validate nvidia-operator-validator is up"
+          - description: "Validate nvidia-operator-validator is completed"
             wait:
               cluster:
                 kind: Pod
