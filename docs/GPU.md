@@ -43,7 +43,7 @@ UDS K3d comes with optional base images that provide GPU scheduling in the clust
 
 ### Usage
 
-#### Local Build
+#### Local Build and Deployment
 
 To use the NVIDIA CUDA K3s image when bootstrapping a UDS K3d cluster, execute the following:
 
@@ -51,20 +51,34 @@ To use the NVIDIA CUDA K3s image when bootstrapping a UDS K3d cluster, execute t
 uds run default-cuda
 ```
 
-#### Remote
+#### Remote Package Deployment
 
 To use the NVIDIA CUDA K3s image when bootstrapping a UDS K3d cluster, execute the following:
 
 <!-- x-release-please-start-version -->
 
 ```bash
-export VERSION=0.10.0
-uds zarf package deploy oci://ghcr.io/justinthelaw/packages/uds-k3d:${VERSION}-cuda --confirm
+export PACKAGE_VERSION=0.10.0
+uds zarf package deploy oci://ghcr.io/justinthelaw/packages/uds-k3d:${PACKAGE_VERSION}-cuda --confirm
 ```
 
 <!-- x-release-please-end -->
 
-### Tests
+##### Additional Base Images
+
+This repository publishes several variations of the underlying K3d image and CUDA image so that it covers more compatibility cases (e.g., GPU driver versions, K3d versions, etc.). Please see the [published images](https://github.com/justinthelaw/uds-k3d/pkgs/container/uds-k3d%2Fcuda-k3s) for all possible variations.
+
+Below are some examples of setting these variables to choose a different variation at deploy-time:
+
+```bash
+uds run default-cuda --set K3S_IMAGE_VERSION="v1.29.8-k3s1" --set CUDA_IMAGE_VERSION="12.1.0-base-ubuntu22.04"
+# OR
+uds zarf package deploy oci://ghcr.io/justinthelaw/packages/uds-k3d:${PACKAGE_VERSION}-cuda --confirm --set K3S_IMAGE_VERSION="v1.31.0-k3s1" --set CUDA_IMAGE_VERSION="12.5.0-base-ubuntu22.04"
+# OR
+uds zarf package deploy oci://ghcr.io/justinthelaw/packages/uds-k3d:${PACKAGE_VERSION}-cuda --confirm --set K3S_IMAGE_VERSION="v1.29.8-k3s1" --set CUDA_IMAGE_VERSION="11.8.0-base-ubi9"
+```
+
+#### Tests
 
 This repository includes two CUDA workload tests that can be executed:
 
@@ -148,7 +162,7 @@ The NVIDIA GPU Operator does not work on WSL2 as of version v24.3.0 (see [issue]
 
 To get around this issue, the recommended course of action is to install UDS K3d without the `cuda` flavor, and then deploy the NVIDIA Device Plugin separately. Below are the steps for doing so:
 
-1. Run `uds run default --set K3D_EXTRA_ARGS="--gpus=all"` or `uds zarf package deploy oci://justinthelaw/uds-k3d:${VERSION} --confirm --set K3D_EXTRA_ARGS="--gpus=all"`
+1. Run `uds run default --set K3D_EXTRA_ARGS="--gpus=all"` or `uds zarf package deploy oci://justinthelaw/uds-k3d:${K3S_IMAGE_VERSION} --confirm --set K3D_EXTRA_ARGS="--gpus=all"`
 2. Create an `nvidia-device-plugin.yaml` manifest like the one below, and a deploy it with `uds zarf tools kubectl apply -f nvidia-device-plugin.yaml`
 
   ```yaml

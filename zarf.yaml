@@ -15,17 +15,21 @@ variables:
     description: "Name of the cluster"
     default: "uds"
 
-  - name: K3D_IMAGE_NAME
-    description: "K3d image name to use"
+  - name: K3S_IMAGE_REPOSITORY
+    description: "K3s image repository to use"
     default: "rancher/k3s"
 
-  - name: K3D_IMAGE_VERSION
+  - name: K3S_IMAGE_VERSION
     description: "K3d image version to use"
     default: "v1.30.4-k3s1"
 
-  - name: CUDA_IMAGE
+  - name: CUDA_IMAGE_VERSION
     description: "CUDA image to use"
     default: "12.1.0-base-ubuntu22.04"
+
+  - name: NUMBER_OF_GPUS
+    description: "Number of GPUs to passthrough to the K3D cluster"
+    default: "all"
 
   - name: K3D_EXTRA_ARGS
     description: "Optionally pass k3d arguments to the default"
@@ -52,7 +56,7 @@ components:
       onDeploy:
         before:
           - cmd: |
-              echo "${ZARF_VAR_K3D_IMAGE_NAME}:${ZARF_VAR_K3D_IMAGE_VERSION}"
+              echo "${ZARF_VAR_K3S_IMAGE_REPOSITORY}:${ZARF_VAR_K3S_IMAGE_VERSION}"
             setVariables:
               - name: K3D_IMAGE
 
@@ -65,7 +69,7 @@ components:
       onDeploy:
         before:
           - cmd: |
-              echo "ghcr.io/justinthelaw/uds-k3d/cuda-k3s:${ZARF_VAR_K3D_IMAGE_VERSION}-cuda-${ZARF_VAR_CUDA_IMAGE}"
+              echo "ghcr.io/justinthelaw/uds-k3d/cuda-k3s:${ZARF_VAR_K3S_IMAGE_VERSION}-cuda-${ZARF_VAR_CUDA_IMAGE_VERSION}"
             setVariables:
               - name: K3D_IMAGE
 
@@ -78,7 +82,7 @@ components:
       onDeploy:
         before:
           - cmd: |
-              echo "${ZARF_VAR_K3D_EXTRA_ARGS} --gpus=all"
+              echo "${ZARF_VAR_K3D_EXTRA_ARGS} --gpus=${ZARF_VAR_NUMBER_OF_GPUS}"
             setVariables:
               - name: K3D_EXTRA_ARGS
 
@@ -172,15 +176,15 @@ components:
                 kind: Pod
                 name: app=nvidia-device-plugin-daemonset
                 namespace: kube-system
-                # Ensure the device plugin is healthy, the minimum required to begin running CUDA workloads
+                # Ensure the device plugin is healthy, which might take a while depending on the machine 
                 condition: "'{.status.conditions[2].status}'=True"
-            maxTotalSeconds: 300
-          - description: "Validate nvidia-operator-validator is up"
+            maxTotalSeconds: 600
+          - description: "Validate nvidia-operator-validator is completed"
             wait:
               cluster:
                 kind: Pod
                 name: app=nvidia-operator-validator
                 namespace: kube-system
-                # Ensure the validator job ends
+                # Ensure the NVIDIA host validator job succeeds
                 condition: "'{.status.conditions[2].status}'=True"
             maxTotalSeconds: 300

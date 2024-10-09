@@ -1,12 +1,12 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.16.0/tasks.schema.json
 
 variables:
-  - name: VERSION
-    default: "v1.30.4-k3s1"
-  - name: CUDA_VERSION
-    default: "12.6.1-base-ubuntu22.04"
-  - name: IMAGE_NAME
+  - name: K3S_IMAGE_REPOSITORY
     default: "rancher/k3s"
+  - name: K3S_IMAGE_VERSION
+    default: "v1.30.4-k3s1"
+  - name: CUDA_IMAGE_VERSION
+    default: "12.1.0-base-ubuntu22.04"
   - name: K3D_EXTRA_ARGS
     default: ""
   - name: NGINX_EXTRA_PORTS
@@ -24,8 +24,8 @@ tasks:
       - description: "Deploy the uds-k3d package"
         cmd: |
           uds zarf package deploy zarf-package-uds-k3d-*.tar.zst \
-            --set K3D_IMAGE_NAME=${IMAGE_NAME} \
-            --set K3D_IMAGE_VERSION=${VERSION} \
+            --set K3S_IMAGE_REPOSITORY=${K3S_IMAGE_REPOSITORY} \
+            --set K3S_IMAGE_VERSION=${K3S_IMAGE_VERSION} \
             --set K3D_EXTRA_ARGS="${K3D_EXTRA_ARGS}" \
             --set NGINX_EXTRA_PORTS="${NGINX_EXTRA_PORTS}" \
             --no-progress --confirm
@@ -39,6 +39,8 @@ tasks:
       - description: "Deploy the uds-k3d CUDA package"
         cmd: |
           uds zarf package deploy zarf-package-uds-k3d-*.tar.zst \
+            --set K3S_IMAGE_VERSION=${K3S_IMAGE_VERSION} \
+            --set CUDA_IMAGE_VERSION=${CUDA_IMAGE_VERSION} \
             --set K3D_EXTRA_ARGS="${K3D_EXTRA_ARGS}" \
             --set NGINX_EXTRA_PORTS="${NGINX_EXTRA_PORTS}" \
             --no-progress --confirm
@@ -87,9 +89,10 @@ tasks:
     actions:
       - description: "Build the CUDA K3s image"
         cmd: |
-          docker build -t ghcr.io/justinthelaw/uds-k3d/cuda-k3s:${VERSION}-cuda-${CUDA_VERSION} \
-            --build-arg K3S_TAG=${VERSION} \
-            --build-arg CUDA_TAG=${CUDA_VERSION} \
+          docker build -t ghcr.io/justinthelaw/uds-k3d/cuda-k3s:${K3S_IMAGE_VERSION}-cuda-${CUDA_IMAGE_VERSION} \
+            --build-arg K3S_REPOSITORY=${K3S_IMAGE_REPOSITORY} \
+            --build-arg K3S_TAG=${K3S_IMAGE_VERSION} \
+            --build-arg CUDA_TAG=${CUDA_IMAGE_VERSION} \
             -f docker/Dockerfile.gpu . -q
 
   - name: publish-cuda-image
@@ -98,5 +101,8 @@ tasks:
         cmd: |
           docker buildx build --push \
             --platform linux/amd64 \
-            -t ghcr.io/justinthelaw/uds-k3d/cuda-k3s:${VERSION}-cuda-${CUDA_VERSION} \
+            --build-arg K3S_REPOSITORY=${K3S_IMAGE_REPOSITORY} \
+            --build-arg K3S_TAG=${K3S_IMAGE_VERSION} \
+            --build-arg CUDA_TAG=${CUDA_IMAGE_VERSION} \
+            -t ghcr.io/justinthelaw/uds-k3d/cuda-k3s:${K3S_IMAGE_VERSION}-cuda-${CUDA_IMAGE_VERSION} \
             -f docker/Dockerfile.gpu . -q
